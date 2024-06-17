@@ -1,0 +1,35 @@
+:root{
+  --primary-clr: #0D6EFD;
+}
+
+.bi {
+  vertical-align: -.125em;
+  pointer-events: none;
+  fill: currentColor;
+}
+
+.dropdown-toggle {
+  outline: 0;
+}
+
+.nav-link.active {
+  background-color: #ffffffe7 !important;
+  color: var(--primary-clr) !important;
+}
+
+.nav-link:hover {
+  background-color: #ffffff2d !important;
+  color: white !important; 
+}
+
+.btn-cart:hover{
+  background-color: #ffffff2d !important;
+  color: white !important; 
+}
+
+.btn-cart{
+  margin-top: -20px;
+  font-size: 13px !important;  
+  padding: 2px 6px;
+}
+
