@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+$role = $_SESSION['user_role'];
+
+if(!isset($role)){
+  header("Location: ../");
+}
+
+
+?>
 <!DOCTYPE html>
 <html class="h-100" lang="en">
 <head>
@@ -78,7 +89,7 @@
           <span class="fs-4 text-primary"><strong>MAKI</strong></span>
         </div>
         <div class="d-flex align-items-center">
-          <span class="fs-6">Juan Dela Cruz</span>
+          <span class="fs-6"><?php echo $_SESSION['user_name'];?></span>
           <ion-icon class="ms-3" size="large" name="person-circle"></ion-icon>
         </div>
       </div>

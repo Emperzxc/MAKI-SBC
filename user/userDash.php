@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+$role = $_SESSION['user_role'];
+
+if(!isset($role)){
+  header("Location: ../");
+}
+
+
+?>
 <!DOCTYPE html>
 <html class="h-100" lang="en">
 <head>
@@ -77,7 +88,7 @@
           <span class="fs-4 text-primary"><strong>MAKI</strong></span>
         </div>
         <div class="d-flex align-items-center">
-          <span class="fs-6">Juan Dela Cruz</span>
+          <span class="fs-6"><?php echo $_SESSION['user_name'];?></span>
           <ion-icon class="ms-3" size="large" name="person-circle"></ion-icon>
         </div>
       </div>
@@ -93,76 +104,34 @@
          <!-- Search Input Field -->
       </div>
       <!-- Suggested -->
-      <div class="px-4">
+      <div class="px-4" >
         <span class="fs-5">Suggested for you</span>
-        <div class="row mt-4">
-        <div class="col-md-3">
+        <div class="row mt-4" >
+        <div class="col-md-3 mb-4 "  v-for="prod in allSuggested">
               <div class="card bg-primary">
                   <div class="row g-0">
                       <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-1.jpg" class="card-img-top rounded" alt="Product 1">
+                          <img :src="'../assets/images/' + prod.prod_image" class="card-img-top rounded bg-white" style="height:120px;"alt="Product 1">
                       </div>
                       <div class="col-md-7">
                           <div class="card-body">
-                              <span class="card-title fs-6 text-light">White Polo - for male</span>
-                              <p class="card-text text-light fw-bold">₱120.00</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
+                              <span class="card-title fs-6 text-light">{{prod.prod_name}}</span>
+                              <p class="card-text text-light fw-bold">₱ {{formatPrice(prod.prod_price)}}</p>
+                              <button class="btn btn-sm btn-light text-primary btn-cart" @click="addToCart(prod.prod_id, prod.prod_name, prod.prod_price, prod.prod_image)">Add to Cart</button>
+                              <div class="text-light d-flex align-items-center">
+                                    <span class="me-2">{{ prod.avg_rating}}</span>
+                                    <span class="me-2" style="font-size:10px;" v-if="prod.avg_rating == 0">No ratings yet</span>
+                                    <ion-icon name="star" v-if="prod.avg_rating >= 1 && prod.avg_rating < 5"></ion-icon>
+                                    <ion-icon name="star" v-if="prod.avg_rating >= 2 && prod.avg_rating < 5"></ion-icon>
+                                    <ion-icon name="star" v-if="prod.avg_rating >= 3 && prod.avg_rating < 5"></ion-icon>
+                                    <ion-icon name="star" v-if="prod.avg_rating >= 4 && prod.avg_rating < 5"></ion-icon>
+                                    <ion-icon name="star" v-if="prod.avg_rating == 5"></ion-icon>
+                                </div>
                           </div>
                       </div>
                   </div>
               </div>
-          </div>
-
-          <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-2.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">School Blouse - for female</span>
-                              <p class="card-text text-light fw-bold">₱120.00</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-3.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">SBC ID lace - version 1.2</span>
-                              <p class="card-text text-light fw-bold">₱120.00</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-4.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">School Skirt - for female</span>
-                              <p class="card-text text-light fw-bold">₱120.00</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
+            </div>
         </div>
       </div>
       <!-- Suggested -->
@@ -171,143 +140,32 @@
       <div class="p-4">
         <span class="fs-5">All Products</span>
         <div class="row mt-4">
-            <div class="col-md-3">
+            <div class="col-md-3 mb-4" v-for="prod in allProducts">
               <div class="card bg-primary">
                   <div class="row g-0">
                       <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-1.jpg" class="card-img-top rounded" alt="Product 1">
+                          <img :src="'../assets/images/' + prod.prod_image" class="card-img-top rounded bg-white" style="height:120px;"alt="Product 1">
                       </div>
                       <div class="col-md-7">
                           <div class="card-body">
-                              <span class="card-title fs-6 text-light">White Polo - for male</span>
-                              <p class="card-text text-light fw-bold">₱120.00</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
+                              <span class="card-title fs-6 text-light">{{prod.prod_name}}</span>
+                              <p class="card-text text-light fw-bold">₱ {{formatPrice(prod.prod_price)}}</p>
+                              <button class="btn btn-sm btn-light text-primary btn-cart" @click="addToCart(prod.prod_id, prod.prod_name, prod.prod_price, prod.prod_image)">Add to Cart</button>
+                              <div class="text-light d-flex align-items-center">
+                                    <span class="me-2">{{ prod.avg_rating}}</span>
+                                    <span class="me-2" style="font-size:10px;" v-if="prod.avg_rating == 0">No ratings yet</span>
+                                    <ion-icon name="star" v-if="prod.avg_rating >= 1 && prod.avg_rating < 5"></ion-icon>
+                                    <ion-icon name="star" v-if="prod.avg_rating >= 2 && prod.avg_rating < 5"></ion-icon>
+                                    <ion-icon name="star" v-if="prod.avg_rating >= 3 && prod.avg_rating < 5"></ion-icon>
+                                    <ion-icon name="star" v-if="prod.avg_rating >= 4 && prod.avg_rating < 5"></ion-icon>
+                                    <ion-icon name="star" v-if="prod.avg_rating == 5"></ion-icon>
+                                </div>
                           </div>
                       </div>
                   </div>
               </div>
-          </div>
+            </div>
 
-          <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-2.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">School Blouse - for female</span>
-                              <p class="card-text text-light fw-bold">₱120.00</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-1.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">White Polo - for male</span>
-                              <p class="card-text text-light fw-bold">$10</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-1.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">White Polo - for male</span>
-                              <p class="card-text text-light fw-bold">$10</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        </div>
-
-        <div class="row mt-4">
-            <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-1.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">White Polo - for male</span>
-                              <p class="card-text text-light fw-bold">₱120.00</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-1.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">School Blouse - for female</span>
-                              <p class="card-text text-light fw-bold">₱120.00</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-1.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">SBC ID lace - version 1.2</span>
-                              <p class="card-text text-light fw-bold">$10</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <div class="col-md-3">
-              <div class="card bg-primary">
-                  <div class="row g-0">
-                      <div class="col-md-5 d-flex align-items-center ps-3">
-                          <img src="../assets/images/product-1.jpg" class="card-img-top rounded" alt="Product 1">
-                      </div>
-                      <div class="col-md-7">
-                          <div class="card-body">
-                              <span class="card-title fs-6 text-light">School Skirt - for female</span>
-                              <p class="card-text text-light fw-bold">$10</p>
-                              <button class="btn btn-sm btn-light text-primary btn-cart">Add to Cart</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
         </div>
       </div>
       <!-- All Products -->
@@ -331,10 +189,33 @@
 new Vue({
   el: '#app',
   data: {
+    uname:'<?php echo $_SESSION['user_name'];?>',
+    uid:'<?php echo $_SESSION['user_id'];?>',
     sidebarWidth: 280,
-    isSidebarOpen: true 
+    isSidebarOpen: true,
+    allProducts:[], 
+    allSuggested:[],
   },
   methods: {
+    formatPrice(price) {
+        // Round the price to the nearest hundredth
+        const roundedPrice = Math.round(price * 100) / 100;
+        
+        // Convert the rounded price to a string and add leading zeros if necessary
+        return roundedPrice.toFixed(2);
+    },
+    fetchAllProducts(){
+      axios.post('../php/user/fetchAllProducts.php').then((response)=>{
+        console.log(response.data);
+        this.allProducts = response.data;
+      })
+    },
+    fetchSuggested(){
+      axios.post('../php/user/fetchSuggested.php').then((response)=>{
+        console.log(response.data);
+        this.allSuggested = response.data;
+      })
+    },
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen; 
       if (this.isSidebarOpen) {
@@ -342,7 +223,24 @@ new Vue({
       } else {
         this.sidebarWidth = 50; 
       }
-    }
+    },
+    addToCart(pid, pname, pprice, pimg){
+      // console.log(pid +', '+pname +', '+pprice+', '+pimg +', '+this.uname +', '+this.uid);
+                axios.post('../php/user/addToCart.php', {
+                    uname: this.uname,
+                    uid: this.uid,
+                    pid: pid,
+                    name: pname,
+                    price: pprice,
+                    img: pimg
+                }).then((response)=>{
+                    console.log(response.data);
+                });
+    },
+  },
+  created(){
+    this.fetchAllProducts();
+    this.fetchSuggested();
   }
 });
 </script>

@@ -48,6 +48,13 @@
             <ion-icon class="bi me-2" name="cart"><use xlink:href="#accounts"></use></ion-icon>
             <span class="d-none d-md-inline">Accounts</span>
           </a>
+        </li>
+        <li class="mb-2">
+          <a href="./adminReports.php" class="nav-link text-white" data-bs-toggle="tooltip" data-bs-placement="right" title="Reports">
+            <ion-icon class="bi me-2" name="document"><use xlink:href="#reports"></use></ion-icon>
+            <span class="d-none d-md-inline">Reports</span>
+          </a>
+        </li>
         <li class="mb-2">
           <a href="./adminSettings.php" class="nav-link text-white" data-bs-toggle="tooltip" data-bs-placement="right" title="Settings">
             <ion-icon class="bi me-2" name="settings"><use xlink:href="#settings"></use></ion-icon>

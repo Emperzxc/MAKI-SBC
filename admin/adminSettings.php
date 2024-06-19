@@ -48,6 +48,7 @@
             <ion-icon class="bi me-2" name="cart"><use xlink:href="#accounts"></use></ion-icon>
             <span class="d-none d-md-inline">Accounts</span>
           </a>
+        </li>
         <li class="mb-2">
           <a href="./adminSettings.php" class="nav-link active" data-bs-toggle="tooltip" data-bs-placement="right" title="Settings">
             <ion-icon class="bi me-2" name="settings"><use xlink:href="#settings"></use></ion-icon>
